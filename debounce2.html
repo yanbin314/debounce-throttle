@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 1200px;
+            height: 300px;
+            background: grey;
+            font-size: 45px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <button>123</button>
+
+    <script>
+        function debounce (fun, time, immediate) {
+            var timeout, result;
+            let debounced = function () {
+                var arg = arguments;
+                var context = this;
+                console.log(timeout);
+                if (timeout) clearTimeout(timeout);
+                console.log(timeout);
+
+                if (immediate) {
+                    var call = !timeout;
+                    // console.log(call, timeout);
+                    timeout = setTimeout( function () {
+                        timeout = null;
+                    }, time);
+                    console.log(call, timeout);
+                    if (call) result = fun.apply(context, arg);
+
+                } else {
+                    timeout = setTimeout( function () {
+                        fun.apply(context, arg);
+                    }, time);
+                }
+                return result;
+            };
+
+            debounced.cancel = function () {
+                clearTimeout(timeout);
+                // 内存泄漏
+                timeout = null;
+            };
+            return debounced;
+        }
+
+
+        let count = 0;
+        let div = document.querySelector('div');
+        let btn = document.querySelector('button');
+        function doSomeThing (e) {
+            console.log(e);
+            console.log(this);
+
+            div.innerHTML = ++count;
+            return '23';
+        }
+
+        let doSome = debounce(doSomeThing, 3000, true);
+        div.onmousemove = doSome;
+        btn.onclick = function () { 
+            doSome.cancel();
+        };
+
+    </script>
+</body>
+</html>
