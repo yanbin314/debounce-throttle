@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 1200px;
+            height: 300px;
+            background: grey;
+            font-size: 45px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <button>123</button>
+
+    <script>
+        let div = document.querySelector('div');
+        let btn = document.querySelector('button');
+        let count = 0;
+
+        let doSome = throttle(doSomeThing, 2000);
+        // let pre = 3;
+        // var p = 4;
+        // console.log(window.p);
+        // div.addEventListener( 'mousemove', () => {
+        //     doSome();
+        // });
+        div.addEventListener( 'mousemove', function () {
+            // console.log(this);
+            doSome();
+        });
+        // div.addEventListener( 'mousemove', doSome);
+        // div.onmousemove = doSome;
+        function throttle(fun, time) {
+            let content, arg;
+            let pre = 0;
+            console.log(this); //window
+            // console.log(1);
+
+            let throttled = function () {
+                // console.log(this);
+                content = this;
+                arg = arguments;
+                // 获取当前的时间戳
+                let now = new Date().valueOf();
+                if (now - pre > time) {
+                    fun.apply(content, arg);
+                    pre = now;
+                }
+            };
+            return throttled;
+        }
+        function doSomeThing(e) {
+            div.innerHTML = ++count;
+            // console.log(this, e);
+        }
+    </script>
+</body>
+</html>
